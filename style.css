@@ -301,6 +301,24 @@ nav a:hover {
     gap: 15px;
   }
 
+.hero {
+  height: 100vh;
+  background: url("images/minerals.jpg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.overlay {
+  background: rgba(0,0,0,0.6);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  width: 90%;
+  max-width: 400px;
+}
+
+
 
 
