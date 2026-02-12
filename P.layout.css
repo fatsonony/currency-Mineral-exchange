@@ -129,10 +129,11 @@ header p {
 }
 
 /* ================= CONTACT SECTION ================= */
-contact-section {
-  background: #f8f8f8;
-  padding: 60px 40px;
-  font-family: Arial, sans-serif;
+.contact-section {
+    background: #f8f8f8;
+    padding: 60px 40px;
+    font-family: Arial, sans-serif;
+    margin-top: 60px;   /* space above it */
 }
 
 .contact-container {
@@ -206,6 +207,7 @@ contact-section {
     background-color: #ffffff;
     color: #000000;
 }
+
 
 
 
