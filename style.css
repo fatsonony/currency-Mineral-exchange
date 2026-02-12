@@ -266,4 +266,41 @@ nav a:hover {
 .btn:hover {
   background: linear-gradient(45deg, gold, orange);
 }
+/* ===== MOBILE FIX ===== */
+@media (max-width: 768px) {
+
+  body {
+    margin: 0;
+  }
+
+  .container,
+  .hero,
+  .main-section {
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+
+  .left-section {
+    display: none; /* hide empty left side */
+  }
+
+  .right-section {
+    width: 100% !important;
+  }
+
+  .hero-content {
+    width: 90%;
+    margin: auto;
+    text-align: center;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+}
+
 
