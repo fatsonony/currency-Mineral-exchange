@@ -136,6 +136,7 @@ header p {
     margin-top: 60px;   /* space above it */
 }
 
+
 .contact-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -168,29 +169,6 @@ header p {
 .contact-box ul li {
   margin-bottom: 8px;
 }
-
-.contact-box ul li a {
-  text-decoration: none;
-  color: #000;
-  font-size: 14px;
-}
-
-.social-icons a {
-  font-size: 18px;
-  margin-right: 12px;
-  text-decoration: none;
-  color: #000;
-}
-
-.qr {
-  width: 120px;
-  margin-top: 15px;
-}
-
-.qr-text {
-  font-size: 12px;
-  margin-top: 5px;
-}
 /* Book Button Style */
 .book-btn {
     background-color: #000000;
@@ -207,6 +185,7 @@ header p {
     background-color: #ffffff;
     color: #000000;
 }
+
 
 
 
