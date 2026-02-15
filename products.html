@@ -4,12 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Products | Currency Minerals Exchange</title>
-<link rel="stylesheet" href="P.layout.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-
-/* ===== BASIC RESPONSIVE FIX ===== */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -22,10 +18,30 @@ body {
     padding: 20px;
 }
 
+.card {
+    text-align: center;
+    border: 1px solid #000;
+    padding: 10px;
+}
+
 .card img {
     width: 100%;
     height: 180px;
     object-fit: cover;
+}
+
+.price {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.like-btn {
+    margin-top: 8px;
+    padding: 6px 12px;
+    border: none;
+    background: black;
+    color: white;
+    cursor: pointer;
 }
 
 .calculator {
@@ -55,42 +71,13 @@ body {
     margin-top: 15px;
     font-weight: bold;
 }
-
-.contact-section {
-    background: #f5f5f5;
-    padding: 40px 20px;
-}
-
-.contact-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    justify-content: space-between;
-}
-
-@media (max-width: 768px) {
-    .contact-container {
-        flex-direction: column;
-        text-align: center;
-    }
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- ================= NAV ================= -->
-<nav>
-    <a href="index.html">Home</a>
-    <a href="order.html">Order Now</a>
-    <i class="fas fa-shopping-cart"></i>
-</nav>
-
-<!-- ================= HEADER ================= -->
 <header>
 <h1>Currency Exchange Minerals</h1>
-<p>We specialize in Gold, Silver, Copper & Iron</p>
 </header>
 
 <!-- ================= PRODUCTS ================= -->
@@ -99,21 +86,33 @@ body {
 <div class="card">
 <img src="Gold.jpg" alt="Gold">
 <h3>Gold</h3>
+<p class="price">R4299 per gram</p>
+<button class="like-btn" onclick="likeMineral('Gold')">👍 Like</button>
+<p id="Gold-likes">0 Likes</p>
 </div>
 
 <div class="card">
 <img src="Chromite.jpg" alt="Chromite">
 <h3>Chromite</h3>
+<p class="price">R2689 per gram</p>
+<button class="like-btn" onclick="likeMineral('Chromite')">👍 Like</button>
+<p id="Chromite-likes">0 Likes</p>
 </div>
 
 <div class="card">
 <img src="chromite ore.jpg" alt="Copper">
 <h3>Copper</h3>
+<p class="price">R254 per gram</p>
+<button class="like-btn" onclick="likeMineral('Copper')">👍 Like</button>
+<p id="Copper-likes">0 Likes</p>
 </div>
 
 <div class="card">
-<img src="Minerals.jpg" alt="Iron">
-<h3>Iron</h3>
+<img src="Minerals.jpg" alt="Mixed">
+<h3>Mixed</h3>
+<p class="price">R799 per gram</p>
+<button class="like-btn" onclick="likeMineral('Mixed')">👍 Like</button>
+<p id="Mixed-likes">0 Likes</p>
 </div>
 
 </section>
@@ -123,17 +122,15 @@ body {
 
 <h2>Mineral Price Calculator</h2>
 
-<label>Select Mineral:</label>
 <select id="mineral">
 <option value="">-- Choose Mineral --</option>
 <option value="Gold">Gold</option>
-<option value="Silver">Silver</option>
+<option value="Chromite">Chromite</option>
 <option value="Copper">Copper</option>
-<option value="Iron">Iron</option>
+<option value="Mixed">Mixed</option>
 </select>
 
-<label>Enter weight (grams):</label>
-<input type="number" id="weight">
+<input type="number" id="weight" placeholder="Enter weight (grams)">
 
 <button onclick="calculateMineral()">Calculate Price</button>
 
@@ -141,29 +138,62 @@ body {
 
 </section>
 
-<!-- ================= CONTACT ================= -->
-<section class="contact-section">
-<div class="contact-container">
+<!-- ================= FIREBASE + SCRIPT ================= -->
+<script type="module">
 
-<div>
-<h2>Currency Minerals Exchange</h2>
-</div>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment }
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<div>
-<h3>Contact Us</h3>
-<p>Palmietkuilen 241, Delmas</p>
-<p>Mpumalanga</p>
-<p>Phone: 063 496 0173</p>
-<p>Email: mineralinvestement1@gmail.com</p>
-</div>
+const firebaseConfig = {
+ apiKey: "AIzaSyBL5_jnbShzSHgAg5wza51TR-uSRiG0U8M",
+ authDomain: "tnteworkspace-c433f.firebaseapp.com",
+ projectId: "tnteworkspace-c433f",
+ storageBucket: "tnteworkspace-c433f.firebasestorage.app",
+ messagingSenderId: "879491809239",
+ appId: "1:879491809239:web:0934ba13fa692cc8d09592",
+};
 
-</div>
-</section>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-<!-- ================= SCRIPT ================= -->
-<script>
+/* ===== LIKE FUNCTION WITH FIREBASE ===== */
+window.likeMineral = async function(mineralName) {
 
-function calculateMineral() {
+    const mineralRef = doc(db, "likes", mineralName);
+    const snap = await getDoc(mineralRef);
+
+    if (snap.exists()) {
+        await updateDoc(mineralRef, {
+            count: increment(1)
+        });
+    } else {
+        await setDoc(mineralRef, { count: 1 });
+    }
+
+    const updatedSnap = await getDoc(mineralRef);
+    document.getElementById(mineralName + "-likes")
+        .innerText = updatedSnap.data().count + " Likes";
+};
+
+/* ===== LOAD LIKES ON PAGE LOAD ===== */
+async function loadLikes() {
+    const minerals = ["Gold", "Chromite", "Copper", "Mixed"];
+
+    for (let name of minerals) {
+        const ref = doc(db, "likes", name);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+            document.getElementById(name + "-likes")
+                .innerText = snap.data().count + " Likes";
+        }
+    }
+}
+
+loadLikes();
+
+/* ===== CALCULATOR ===== */
+window.calculateMineral = function() {
 
     const mineral = document.getElementById("mineral").value;
     const weight = parseFloat(document.getElementById("weight").value);
@@ -176,22 +206,18 @@ function calculateMineral() {
 
     let price = 0;
 
-    if (mineral === "Gold") price = 1200;
-    else if (mineral === "Silver") price = 10;
-    else if (mineral === "Copper") price = 15;
-    else if (mineral === "Iron") price = 5;
+    if (mineral === "Gold") price = 4299;
+    else if (mineral === "Chromite") price = 2689;
+    else if (mineral === "Copper") price = 254;
+    else if (mineral === "Mixed") price = 799;
 
     const total = price * weight;
 
     document.getElementById("result").innerText =
         "Total Price = R" + total.toFixed(2);
-}
+};
 
 </script>
 
 </body>
 </html>
-
-
-
-
