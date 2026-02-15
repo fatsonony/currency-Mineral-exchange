@@ -78,12 +78,11 @@ body {
 
 <header>
 <h1>Currency Exchange Minerals</h1>
-    <nav style="display:flex; gap:20px; padding:15px; background:black;">
+<nav style="display:flex; gap:20px; padding:15px; background:black;">
   <a href="index.html" style="color:white;">Home</a>
   <a href="products.html" style="color:white;">Products</a>
   <a href="order.html" style="color:white;">Order Now</a>
 </nav>
-
 </header>
 
 <!-- ================= PRODUCTS ================= -->
@@ -219,7 +218,6 @@ function calculateMineral() {
         "Total Price = R" + total.toFixed(2);
 }
 
-/* Make functions global for buttons */
 window.likeMineral = likeMineral;
 window.calculateMineral = calculateMineral;
 
@@ -227,36 +225,5 @@ loadLikes();
 
 </script>
 
-
-/* ===== CALCULATOR ===== */
-window.calculateMineral = function() {
-
-    const mineral = document.getElementById("mineral").value;
-    const weight = parseFloat(document.getElementById("weight").value);
-
-    if (!mineral || !weight) {
-        document.getElementById("result").innerText =
-            "Please select mineral and enter weight.";
-        return;
-    }
-
-    let price = 0;
-
-    if (mineral === "Gold") price = 4299;
-    else if (mineral === "Chromite") price = 2689;
-    else if (mineral === "Copper") price = 254;
-    else if (mineral === "Mixed") price = 799;
-
-    const total = price * weight;
-
-    document.getElementById("result").innerText =
-        "Total Price = R" + total.toFixed(2);
-};
-
-</script>
-
 </body>
 </html>
-
-
-
