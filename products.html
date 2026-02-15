@@ -152,19 +152,18 @@ import { getFirestore, doc, getDoc, setDoc, updateDoc, increment }
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
- apiKey: "AIzaSyBL5_jnbShzSHgAg5wza51TR-uSRiG0U8M",
- authDomain: "tnteworkspace-c433f.firebaseapp.com",
- projectId: "tnteworkspace-c433f",
- storageBucket: "tnteworkspace-c433f.firebasestorage.app",
- messagingSenderId: "879491809239",
- appId: "1:879491809239:web:0934ba13fa692cc8d09592",
+  apiKey: "AIzaSyBL5_jnbShzSHgAg5wza51TR-uSRiG0U8M",
+  authDomain: "tnteworkspace-c433f.firebaseapp.com",
+  projectId: "tnteworkspace-c433f",
+  storageBucket: "tnteworkspace-c433f.appspot.com",
+  messagingSenderId: "879491809239",
+  appId: "1:879491809239:web:0934ba13fa692cc8d09592"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ===== LIKE FUNCTION WITH FIREBASE ===== */
-window.likeMineral = async function(mineralName) {
+async function likeMineral(mineralName) {
 
     const mineralRef = doc(db, "likes", mineralName);
     const snap = await getDoc(mineralRef);
@@ -180,10 +179,10 @@ window.likeMineral = async function(mineralName) {
     const updatedSnap = await getDoc(mineralRef);
     document.getElementById(mineralName + "-likes")
         .innerText = updatedSnap.data().count + " Likes";
-};
+}
 
-/* ===== LOAD LIKES ON PAGE LOAD ===== */
 async function loadLikes() {
+
     const minerals = ["Gold", "Chromite", "Copper", "Mixed"];
 
     for (let name of minerals) {
@@ -196,7 +195,38 @@ async function loadLikes() {
     }
 }
 
+function calculateMineral() {
+
+    const mineral = document.getElementById("mineral").value;
+    const weight = parseFloat(document.getElementById("weight").value);
+
+    if (!mineral || !weight) {
+        document.getElementById("result").innerText =
+            "Please select mineral and enter weight.";
+        return;
+    }
+
+    let price = 0;
+
+    if (mineral === "Gold") price = 4299;
+    else if (mineral === "Chromite") price = 2689;
+    else if (mineral === "Copper") price = 254;
+    else if (mineral === "Mixed") price = 799;
+
+    const total = price * weight;
+
+    document.getElementById("result").innerText =
+        "Total Price = R" + total.toFixed(2);
+}
+
+/* Make functions global for buttons */
+window.likeMineral = likeMineral;
+window.calculateMineral = calculateMineral;
+
 loadLikes();
+
+</script>
+
 
 /* ===== CALCULATOR ===== */
 window.calculateMineral = function() {
@@ -227,5 +257,6 @@ window.calculateMineral = function() {
 
 </body>
 </html>
+
 
 
