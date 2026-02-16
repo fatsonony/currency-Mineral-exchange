@@ -11,6 +11,10 @@ body {
     font-family: Arial, sans-serif;
 }
 
+header {
+    text-align: center;
+}
+
 .minerals {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -33,15 +37,6 @@ body {
 .price {
     font-weight: bold;
     margin-top: 10px;
-}
-
-.like-btn {
-    margin-top: 8px;
-    padding: 6px 12px;
-    border: none;
-    background: black;
-    color: white;
-    cursor: pointer;
 }
 
 .calculator {
@@ -78,10 +73,10 @@ body {
 
 <header>
 <h1>Currency Exchange Minerals</h1>
-<nav style="display:flex; gap:20px; padding:15px; background:black;">
-  <a href="index.html" style="color:white;">Home</a>
-  <a href="products.html" style="color:white;">Products</a>
-  <a href="order.html" style="color:white;">Order Now</a>
+<nav style="display:flex; gap:20px; padding:15px; background:black; justify-content:center;">
+  <a href="index.html" style="color:white; text-decoration:none;">Home</a>
+  <a href="products.html" style="color:white; text-decoration:none;">Products</a>
+  <a href="order.html" style="color:white; text-decoration:none;">Order Now</a>
 </nav>
 </header>
 
@@ -92,32 +87,24 @@ body {
 <img src="Gold.jpg" alt="Gold">
 <h3>Gold</h3>
 <p class="price">R4299 per gram</p>
-<button class="like-btn" onclick="likeMineral('Gold')">👍 Like</button>
-<p id="Gold-likes">0 Likes</p>
 </div>
 
 <div class="card">
 <img src="Chromite.jpg" alt="Chromite">
 <h3>Chromite</h3>
 <p class="price">R2689 per gram</p>
-<button class="like-btn" onclick="likeMineral('Chromite')">👍 Like</button>
-<p id="Chromite-likes">0 Likes</p>
 </div>
 
 <div class="card">
 <img src="chromite ore.jpg" alt="Copper">
 <h3>Copper</h3>
 <p class="price">R254 per gram</p>
-<button class="like-btn" onclick="likeMineral('Copper')">👍 Like</button>
-<p id="Copper-likes">0 Likes</p>
 </div>
 
 <div class="card">
 <img src="Minerals.jpg" alt="Mixed">
 <h3>Mixed</h3>
 <p class="price">R799 per gram</p>
-<button class="like-btn" onclick="likeMineral('Mixed')">👍 Like</button>
-<p id="Mixed-likes">0 Likes</p>
 </div>
 
 </section>
@@ -143,65 +130,17 @@ body {
 
 </section>
 
-<!-- ================= FIREBASE + SCRIPT ================= -->
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, increment }
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBL5_jnbShzSHgAg5wza51TR-uSRiG0U8M",
-  authDomain: "tnteworkspace-c433f.firebaseapp.com",
-  projectId: "tnteworkspace-c433f",
-  storageBucket: "tnteworkspace-c433f.appspot.com",
-  messagingSenderId: "879491809239",
-  appId: "1:879491809239:web:0934ba13fa692cc8d09592"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-async function likeMineral(mineralName) {
-
-    const mineralRef = doc(db, "likes", mineralName);
-    const snap = await getDoc(mineralRef);
-
-    if (snap.exists()) {
-        await updateDoc(mineralRef, {
-            count: increment(1)
-        });
-    } else {
-        await setDoc(mineralRef, { count: 1 });
-    }
-
-    const updatedSnap = await getDoc(mineralRef);
-    document.getElementById(mineralName + "-likes")
-        .innerText = updatedSnap.data().count + " Likes";
-}
-
-async function loadLikes() {
-
-    const minerals = ["Gold", "Chromite", "Copper", "Mixed"];
-
-    for (let name of minerals) {
-        const ref = doc(db, "likes", name);
-        const snap = await getDoc(ref);
-        if (snap.exists()) {
-            document.getElementById(name + "-likes")
-                .innerText = snap.data().count + " Likes";
-        }
-    }
-}
+<!-- ================= SCRIPT ================= -->
+<script>
 
 function calculateMineral() {
 
     const mineral = document.getElementById("mineral").value;
     const weight = parseFloat(document.getElementById("weight").value);
 
-    if (!mineral || !weight) {
+    if (!mineral || !weight || weight <= 0) {
         document.getElementById("result").innerText =
-            "Please select mineral and enter weight.";
+            "Please select mineral and enter valid weight.";
         return;
     }
 
@@ -217,11 +156,6 @@ function calculateMineral() {
     document.getElementById("result").innerText =
         "Total Price = R" + total.toFixed(2);
 }
-
-window.likeMineral = likeMineral;
-window.calculateMineral = calculateMineral;
-
-loadLikes();
 
 </script>
 
